@@ -1,4 +1,7 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
+import 'package:spend_wise/core/shared_prefs/shared_prefs.dart';
 import 'package:spend_wise/core/utils/utils.dart';
 import 'package:http/http.dart' as http;
 import 'package:spend_wise/features/auth/presentation/screens/login_screen.dart';
@@ -18,6 +21,8 @@ class AuthRepo {
       print(response.body);
       if (response.statusCode == 200) {
         print('Login successful');
+        SharedPrefs.saveUserTokenSharedPreference(
+            jsonDecode(response.body)['user']['token']);
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (_) => const HomeScreen()));
         return true;
@@ -43,8 +48,9 @@ class AuthRepo {
     try {
       final response = await http.post(Uri.parse(url), body: body);
       print(response.body);
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201 || response.statusCode == 200) {
         print('Registration successful');
+
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (_) => const LoginScreen()));
         return true;

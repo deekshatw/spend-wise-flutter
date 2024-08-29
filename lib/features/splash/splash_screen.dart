@@ -14,7 +14,7 @@ class _SplashScreenState extends State<SplashScreen> {
   bool isLoggedIn = false;
   @override
   void initState() {
-    // _checkIsLoggedIn();
+    _checkIsLoggedIn();
     Future.delayed(Duration(seconds: 3), () {
       Navigator.pushReplacement(
           context,

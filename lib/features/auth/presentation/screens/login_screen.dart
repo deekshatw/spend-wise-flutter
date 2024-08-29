@@ -169,7 +169,7 @@ class _LoginScreenState extends State<LoginScreen> {
                               label: 'Enter your password',
                               isPassword: true,
                               validator: (val) {
-                                return val!.isEmpty || val.length < 8
+                                return val!.isEmpty || val.length < 4
                                     ? 'Password must be at least 8 characters'
                                     : null;
                               },

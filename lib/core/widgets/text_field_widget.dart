@@ -6,6 +6,7 @@ class TextFieldWidget extends StatefulWidget {
   final String label;
   final bool isPassword;
   final String? Function(String?)? validator;
+  final TextInputType? keyboardType;
 
   const TextFieldWidget({
     super.key,
@@ -13,6 +14,7 @@ class TextFieldWidget extends StatefulWidget {
     required this.label,
     required this.isPassword,
     this.validator,
+    this.keyboardType = TextInputType.name,
   });
 
   @override

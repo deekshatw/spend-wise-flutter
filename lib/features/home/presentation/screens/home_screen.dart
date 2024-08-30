@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:spend_wise/core/utils/colors.dart';
 import 'package:spend_wise/features/dashboard/presentation/screens/dashboard_screen.dart';
@@ -5,20 +6,30 @@ import 'package:spend_wise/features/profile/presentation/screens/profile_screen.
 import 'package:spend_wise/features/transactions/presentation/screens/transactions_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final int initialIndex; // Add this parameter
+
+  const HomeScreen(
+      {super.key, this.initialIndex = 0}); // Default to 0 (Dashboard)
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  int _selectedIndex = 0;
+  late int _selectedIndex; // Use late initialization
 
   static const List<Widget> _widgetOptions = <Widget>[
     DashboardScreen(),
     TransactionsScreen(),
     ProfileScreen(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    // Set the initial index based on the passed parameter
+    _selectedIndex = widget.initialIndex;
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -40,13 +51,9 @@ class _HomeScreenState extends State<HomeScreen> {
             label: 'Dashboard',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.bar_chart_rounded),
-            label: 'Statistics',
+            icon: Icon(Icons.monetization_on),
+            label: 'Transactions',
           ),
-          // BottomNavigationBarItem(
-          //   icon: Icon(Icons.category),
-          //   label: 'Categories',
-          // ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Profile',

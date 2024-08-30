@@ -23,6 +23,8 @@ class AuthRepo {
         print('Login successful');
         SharedPrefs.saveUserTokenSharedPreference(
             jsonDecode(response.body)['user']['token']);
+        SharedPrefs.saveUserIdSharedPreference(
+            jsonDecode(response.body)['user']['userId']);
         Navigator.pushReplacement(
             context, MaterialPageRoute(builder: (_) => const HomeScreen()));
         return true;

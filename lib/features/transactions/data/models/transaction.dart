@@ -1,6 +1,9 @@
+import 'package:spend_wise/features/transactions/data/models/category.dart';
+
 class Transaction {
   String? transactionId;
   int? amount;
+  String? title;
   String? description;
   String? date;
   String? userId;
@@ -10,6 +13,7 @@ class Transaction {
   Transaction(
       {this.transactionId,
       this.amount,
+      this.title,
       this.description,
       this.date,
       this.userId,
@@ -19,6 +23,7 @@ class Transaction {
   Transaction.fromJson(Map<String, dynamic> json) {
     transactionId = json['transactionId'];
     amount = json['amount'];
+    title = json['title'];
     description = json['description'];
     date = json['date'];
     userId = json['userId'];
@@ -32,6 +37,7 @@ class Transaction {
     final Map<String, dynamic> data = new Map<String, dynamic>();
     data['transactionId'] = this.transactionId;
     data['amount'] = this.amount;
+    data['title'] = this.title;
     data['description'] = this.description;
     data['date'] = this.date;
     data['userId'] = this.userId;
@@ -39,28 +45,6 @@ class Transaction {
       data['category'] = this.category!.toJson();
     }
     data['transactionType'] = this.transactionType;
-    return data;
-  }
-}
-
-class Category {
-  String? categoryId;
-  String? name;
-  String? description;
-
-  Category({this.categoryId, this.name, this.description});
-
-  Category.fromJson(Map<String, dynamic> json) {
-    categoryId = json['categoryId'];
-    name = json['name'];
-    description = json['description'];
-  }
-
-  Map<String, dynamic> toJson() {
-    final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['categoryId'] = this.categoryId;
-    data['name'] = this.name;
-    data['description'] = this.description;
     return data;
   }
 }

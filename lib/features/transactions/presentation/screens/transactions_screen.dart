@@ -3,6 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spend_wise/core/utils/colors.dart';
 import 'package:spend_wise/core/widgets/loader_widget.dart';
 import 'package:spend_wise/features/transactions/bloc/transaction_bloc.dart';
+import 'package:spend_wise/features/transactions/domain/helpers/transaction_helper.dart';
+import 'package:spend_wise/features/transactions/presentation/screens/add_transaction_screen.dart';
+import 'package:spend_wise/features/transactions/presentation/widgets/filtering_options_bottom_sheet.dart';
+import 'package:spend_wise/features/transactions/presentation/widgets/summary_card_widget.dart';
+import 'package:spend_wise/features/transactions/presentation/widgets/transaction_item_widget.dart';
 
 class TransactionsScreen extends StatefulWidget {
   const TransactionsScreen({super.key});
@@ -15,10 +20,24 @@ class _TransactionsScreenState extends State<TransactionsScreen>
     with SingleTickerProviderStateMixin {
   TabController? _tabController;
   TransactionBloc bloc = TransactionBloc();
+  List<String> filters = [
+    'Today',
+    'Yesterday',
+    'This month',
+    'Last month',
+    'This Week',
+    'Last Week',
+    'This year',
+    'Last year',
+    'Custom Date Selection'
+  ];
+
+  String currentAppliedFilter = 'All';
 
   @override
   void initState() {
     super.initState();
+
     _tabController = TabController(length: 3, vsync: this);
     bloc = TransactionBloc();
     bloc.add(TransactionsInitialFetchEvent(type: 'all'));
@@ -35,7 +54,7 @@ class _TransactionsScreenState extends State<TransactionsScreen>
     return Scaffold(
       appBar: AppBar(
         title: const Text(
-          'Statistics',
+          'Transactions',
           style: TextStyle(
             color: AppColors.charcoal,
             fontWeight: FontWeight.w600,
@@ -75,15 +94,23 @@ class _TransactionsScreenState extends State<TransactionsScreen>
           },
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        backgroundColor: AppColors.primary,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(100),
-        ),
-        onPressed: () {},
-        child: const Icon(
-          Icons.add,
-          color: Colors.white,
+      floatingActionButton: Container(
+        margin: const EdgeInsets.only(bottom: 5),
+        child: FloatingActionButton(
+          backgroundColor: AppColors.primary,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(100),
+          ),
+          onPressed: () {
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (_) => const AddTransactionScreen()));
+          },
+          child: const Icon(
+            Icons.add,
+            color: Colors.white,
+          ),
         ),
       ),
       body: TabBarView(
@@ -105,79 +132,159 @@ class _TransactionsScreenState extends State<TransactionsScreen>
       listener: (context, state) {},
       builder: (context, state) {
         if (state is TransactionsInitialFetchSuccessState) {
-          return Padding(
-            padding: const EdgeInsets.all(20.0),
-            child: ListView.builder(
-              itemCount: state.transactions.length,
-              itemBuilder: (context, index) {
-                return Container(
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 10,
-                    horizontal: 20,
-                  ),
-                  margin: const EdgeInsets.symmetric(vertical: 5),
-                  decoration: BoxDecoration(
-                    color: AppColors.gray.withOpacity(0.1),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    children: [
-                      Row(
-                        children: [
-                          Icon(
-                              state.transactions[index].transactionType ==
-                                      'income'
-                                  ? Icons.arrow_upward_rounded
-                                  : Icons.arrow_downward_rounded,
-                              color:
-                                  state.transactions[index].transactionType ==
-                                          'income'
-                                      ? Colors.green
-                                      : Colors.red),
-                          const SizedBox(width: 10),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(state.transactions[index].description
-                                  .toString()),
-                              Container(
-                                padding: const EdgeInsets.symmetric(
-                                    vertical: 5, horizontal: 10),
-                                decoration: BoxDecoration(
-                                  color: AppColors.orchidPink.withOpacity(0.3),
-                                  borderRadius: BorderRadius.circular(10),
-                                ),
-                                child: Text(
-                                  state.transactions[index].category!.name
-                                      .toString(),
-                                  style: const TextStyle(
-                                    color: AppColors.charcoal,
-                                    fontWeight: FontWeight.w500,
-                                  ),
+          List<Widget> children = [];
+          if (type == 'all' && state.transactionSummary != null) {
+            final totalExpenses = state.transactionSummary!.expense;
+            final totalIncomes = state.transactionSummary!.income;
+            final balance = state.transactionSummary!.balance;
+
+            children.add(
+              Padding(
+                padding: const EdgeInsets.symmetric(vertical: 10.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Balance',
+                              style: TextStyle(
+                                color: AppColors.charcoal.withOpacity(0.8),
+                                fontWeight: FontWeight
+                                    .w700, // Make the label slightly bolder
+                                fontSize: 16, // Increase the font size
+                              ),
+                            ),
+                            Text(
+                              '$balance USD', // Use string interpolation
+                              style: const TextStyle(
+                                fontSize:
+                                    22, // Increase the font size for better emphasis
+                                fontWeight: FontWeight
+                                    .bold, // Keep the balance amount bold
+                                color: AppColors.charcoal,
+                              ),
+                            ),
+                          ],
+                        ),
+                        InkWell(
+                          onTap: () {
+                            showModalBottomSheet(
+                              context: context,
+                              showDragHandle: true,
+                              backgroundColor: Colors.white,
+                              shape: const RoundedRectangleBorder(
+                                borderRadius: BorderRadius.vertical(
+                                  top: Radius.circular(20),
                                 ),
                               ),
-                            ],
+                              builder: (BuildContext context) {
+                                return FilteringOptionsBottomSheet(
+                                  filters: filters,
+                                  onFilterAndDateRangeSelected:
+                                      (selectedFilter, dateRange) {
+                                    currentAppliedFilter = selectedFilter;
+                                    if (selectedFilter ==
+                                        'Custom Date Selection') {
+                                      _applyFilter(selectedFilter,
+                                          customDateRange: dateRange);
+                                    } else {
+                                      _applyFilter(selectedFilter);
+                                    }
+                                  },
+                                );
+                              },
+                            );
+                          },
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                vertical: 8, horizontal: 12),
+                            decoration: BoxDecoration(
+                              border: Border.all(
+                                  color: AppColors.charcoal.withOpacity(0.5),
+                                  width: 0.8),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Text(
+                                  currentAppliedFilter,
+                                  style: const TextStyle(
+                                    color: AppColors.charcoal,
+                                    fontWeight: FontWeight.w600,
+                                    fontSize: 13,
+                                  ),
+                                ),
+                                const Icon(Icons.arrow_drop_down,
+                                    color: AppColors.charcoal),
+                              ],
+                            ),
                           ),
-                        ],
-                      ),
-                      Text(
-                        state.transactions[index].transactionType == 'income'
-                            ? " + \$${state.transactions[index].amount.toString()}"
-                            : " - \$${state.transactions[index].amount.toString()}",
-                        style: TextStyle(
-                          color: state.transactions[index].transactionType ==
-                                  'income'
-                              ? Colors.green
-                              : Colors.red,
-                          fontWeight: FontWeight.w600,
-                          fontSize: 18,
                         ),
+                      ],
+                    ),
+                    const SizedBox(height: 10),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        SummaryCardWidget(
+                          label: 'Income',
+                          value: totalIncomes.toString(),
+                          icon: Icons.trending_up,
+                          color: Colors.green,
+                        ),
+                        SummaryCardWidget(
+                          label: 'Expense',
+                          value: totalExpenses.toString(),
+                          icon: Icons.trending_down,
+                          color: Colors.red,
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 20),
+                    Text(
+                      'Transactions',
+                      style: TextStyle(
+                        color: AppColors.charcoal.withOpacity(0.8),
+                        fontWeight: FontWeight.w600,
+                        fontSize: 14,
                       ),
-                    ],
-                  ),
-                );
+                    ),
+                  ],
+                ),
+              ),
+            );
+          }
+
+          // Add the transaction items below the summary
+          children.add(
+            ListView.builder(
+              shrinkWrap: true,
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: state.transactions.length,
+              itemBuilder: (context, index) {
+                return TransactionItemWidget(
+                    transaction: state.transactions[index]);
               },
+            ),
+          );
+
+          return Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: RefreshIndicator(
+              onRefresh: () async {
+                bloc.add(TransactionsInitialFetchEvent(type: type));
+              },
+              child: SingleChildScrollView(
+                child: Column(
+                  children: children,
+                ),
+              ),
             ),
           );
         } else if (state is TransactionErrorState) {
@@ -189,11 +296,23 @@ class _TransactionsScreenState extends State<TransactionsScreen>
             child: Text('No transactions found'),
           );
         } else if (state is TransactionLoading) {
-          return LoaderWidget();
+          return const LoaderWidget();
         } else {
           return const SizedBox();
         }
       },
     );
+  }
+
+  void _applyFilter(String selectedFilter, {DateTimeRange? customDateRange}) {
+    DateTimeRange dateRange = TransactionHelper.calculateDateRange(
+        selectedFilter,
+        customDateRange: customDateRange);
+
+    bloc.add(TransactionsInitialFetchEvent(
+      type: 'all', // Or any other type you want to pass
+      startDate: dateRange.start.toIso8601String(),
+      endDate: dateRange.end.toIso8601String(),
+    ));
   }
 }

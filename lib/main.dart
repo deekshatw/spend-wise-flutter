@@ -8,8 +8,7 @@ void main() {
       home: SplashScreen(),
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: AppColors.primarySwatch,
-      ),
+          primarySwatch: AppColors.primarySwatch, fontFamily: 'Inter'),
     ),
   );
 }

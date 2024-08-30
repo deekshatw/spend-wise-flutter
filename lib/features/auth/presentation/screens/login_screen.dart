@@ -151,6 +151,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             TextFieldWidget(
                               controller: _emailController,
                               label: 'Enter your email',
+                              keyboardType: TextInputType.emailAddress,
                               isPassword: false,
                               validator: (val) {
                                 return RegExp(

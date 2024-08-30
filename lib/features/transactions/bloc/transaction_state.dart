@@ -19,6 +19,16 @@ final class TransactionErrorState extends TransactionState {
 
 final class TransactionsInitialFetchSuccessState extends TransactionState {
   final List<Transaction> transactions;
+  final TransactionSummary? transactionSummary;
 
-  TransactionsInitialFetchSuccessState(this.transactions);
+  TransactionsInitialFetchSuccessState({
+    required this.transactions,
+    this.transactionSummary,
+  });
+}
+
+class TransactionCategoriesFetchSuccessState extends TransactionState {
+  final List<Category> categories;
+
+  TransactionCategoriesFetchSuccessState(this.categories);
 }

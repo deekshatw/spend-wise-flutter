@@ -11,3 +11,12 @@ class TransactionsInitialFetchEvent extends TransactionEvent {
   TransactionsInitialFetchEvent(
       {this.type = 'all', this.startDate, this.endDate});
 }
+
+class TransactionCategoriesFetchEvent extends TransactionEvent {}
+
+class TransactionCreateTransactionEvent extends TransactionEvent {
+  final Map<String, dynamic> body;
+  final BuildContext context;
+
+  TransactionCreateTransactionEvent(this.body, this.context);
+}

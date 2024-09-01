@@ -1,8 +1,5 @@
-import 'dart:io';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
-import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
@@ -13,7 +10,6 @@ import 'package:spend_wise/core/widgets/loader_widget.dart';
 import 'package:spend_wise/core/widgets/primary_button.dart';
 import 'package:spend_wise/core/widgets/text_field_widget.dart';
 import 'package:spend_wise/features/transactions/bloc/transaction_bloc.dart';
-import 'package:spend_wise/features/transactions/data/models/transaction.dart';
 import 'package:spend_wise/features/transactions/presentation/widgets/categories_bottom_sheet.dart';
 
 class AddTransactionScreen extends StatefulWidget {

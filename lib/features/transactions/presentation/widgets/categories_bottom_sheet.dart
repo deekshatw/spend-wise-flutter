@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_null_comparison
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:spend_wise/core/utils/colors.dart';
@@ -54,7 +56,7 @@ class _CategoriesBottomSheetState extends State<CategoriesBottomSheet> {
                     itemBuilder: (context, index) {
                       final category = state.categories[index];
                       final isSelected =
-                          _selectedCategory?.categoryId == category.categoryId;
+                          _selectedCategory.categoryId == category.categoryId;
 
                       return GestureDetector(
                         onTap: () {
@@ -82,7 +84,7 @@ class _CategoriesBottomSheetState extends State<CategoriesBottomSheet> {
                           ),
                           child: Row(
                             children: [
-                              Icon(
+                              const Icon(
                                 Icons.category,
                                 color: AppColors.roseTaupe,
                               ),
@@ -92,7 +94,7 @@ class _CategoriesBottomSheetState extends State<CategoriesBottomSheet> {
                                 children: [
                                   Text(
                                     category.name.toString(),
-                                    style: TextStyle(
+                                    style: const TextStyle(
                                       fontSize: 17,
                                       color: AppColors.charcoal,
                                       fontWeight: FontWeight.w600,
@@ -125,10 +127,8 @@ class _CategoriesBottomSheetState extends State<CategoriesBottomSheet> {
                   onTap: _selectedCategory == null
                       ? null
                       : () {
-                          if (_selectedCategory != null) {
-                            widget.onCategorySelected(_selectedCategory!);
-                            Navigator.pop(context); // Close the bottom sheet
-                          }
+                          widget.onCategorySelected(_selectedCategory);
+                          Navigator.pop(context); // Close the bottom sheet
                         },
                   label: 'Select',
                 ),
@@ -136,13 +136,13 @@ class _CategoriesBottomSheetState extends State<CategoriesBottomSheet> {
             ),
           );
         } else if (state is TransactionLoading) {
-          return LoaderWidget();
+          return const LoaderWidget();
         } else if (state is TransactionErrorState) {
           return Center(
             child: Text('Error: ${state.message}'),
           );
         } else if (state is TransactionEmptyState) {
-          return Center(
+          return const Center(
             child: Text('No categories found'),
           );
         } else {

@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:spend_wise/core/utils/colors.dart';
 import 'package:spend_wise/core/widgets/loader_widget.dart';
 import 'package:spend_wise/features/transactions/bloc/transaction_bloc.dart';
 import 'package:spend_wise/features/transactions/domain/helpers/transaction_helper.dart';
 import 'package:spend_wise/features/transactions/presentation/screens/add_transaction_screen.dart';
-import 'package:spend_wise/features/transactions/presentation/screens/statistics_screen.dart';
 import 'package:spend_wise/features/transactions/presentation/widgets/filtering_options_bottom_sheet.dart';
-import 'package:spend_wise/features/transactions/presentation/widgets/summary_card_widget.dart';
 import 'package:spend_wise/features/transactions/presentation/widgets/transaction_item_widget.dart';
+import 'package:syncfusion_flutter_charts/charts.dart';
 
-class TransactionsScreen extends StatefulWidget {
-  const TransactionsScreen({super.key});
+class StatisticsScreen extends StatefulWidget {
+  const StatisticsScreen({super.key});
 
   @override
-  State<TransactionsScreen> createState() => _TransactionsScreenState();
+  State<StatisticsScreen> createState() => _StatisticsScreen();
 }
 
-class _TransactionsScreenState extends State<TransactionsScreen>
+class _StatisticsScreen extends State<StatisticsScreen>
     with SingleTickerProviderStateMixin {
   TabController? _tabController;
   TransactionBloc bloc = TransactionBloc();
@@ -54,9 +54,9 @@ class _TransactionsScreenState extends State<TransactionsScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        automaticallyImplyLeading: false,
+        // automaticallyImplyLeading: false,
         title: const Text(
-          'Transactions',
+          'Statistics',
           style: TextStyle(
             color: AppColors.charcoal,
             fontWeight: FontWeight.w600,
@@ -136,9 +136,26 @@ class _TransactionsScreenState extends State<TransactionsScreen>
         if (state is TransactionsInitialFetchSuccessState) {
           List<Widget> children = [];
           if (type == 'all' && state.transactionSummary != null) {
-            final totalExpenses = state.transactionSummary!.expense;
-            final totalIncomes = state.transactionSummary!.income;
+            // final totalExpenses = state.transactionSummary!.expense;
+            // final totalIncomes = state.transactionSummary!.income;
             final balance = state.transactionSummary!.balance;
+
+            // Prepare data for the chart
+            final expenseData = state.transactions
+                .where((t) => t.transactionType == 'expense')
+                .map((t) => ChartData(
+                      DateTime.parse(t.date!),
+                      t.amount!.toDouble(),
+                    ))
+                .toList();
+
+            final incomeData = state.transactions
+                .where((t) => t.transactionType == 'income')
+                .map((t) => ChartData(
+                      DateTime.parse(t.date!),
+                      t.amount!.toDouble(),
+                    ))
+                .toList();
 
             children.add(
               Padding(
@@ -161,12 +178,10 @@ class _TransactionsScreenState extends State<TransactionsScreen>
                               ),
                             ),
                             Text(
-                              '$balance USD', // Use string interpolation
+                              '$balance USD',
                               style: const TextStyle(
-                                fontSize:
-                                    22, // Increase the font size for better emphasis
-                                fontWeight: FontWeight
-                                    .bold, // Keep the balance amount bold
+                                fontSize: 22,
+                                fontWeight: FontWeight.bold,
                                 color: AppColors.charcoal,
                               ),
                             ),
@@ -229,59 +244,77 @@ class _TransactionsScreenState extends State<TransactionsScreen>
                         ),
                       ],
                     ),
-                    const SizedBox(height: 10),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        SummaryCardWidget(
-                          label: 'Income',
-                          value: totalIncomes.toString(),
-                          icon: Icons.trending_up,
-                          color: Colors.green,
+                    // Chart area
+                    SizedBox(
+                      height: MediaQuery.of(context).size.height * 0.4,
+                      child: SfCartesianChart(
+                        legend: const Legend(
+                          isVisible: true,
+                          position: LegendPosition.bottom,
+                          overflowMode: LegendItemOverflowMode.wrap,
                         ),
-                        SummaryCardWidget(
-                          label: 'Expense',
-                          value: totalExpenses.toString(),
-                          icon: Icons.trending_down,
-                          color: Colors.red,
+                        primaryXAxis: DateTimeAxis(
+                          dateFormat: DateFormat("MMM, dd"),
+                          intervalType: DateTimeIntervalType.days,
+                          edgeLabelPlacement: EdgeLabelPlacement.shift,
                         ),
-                      ],
-                    ),
-                    const SizedBox(height: 20),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        const Text(
-                          'Transactions',
-                          style: TextStyle(
-                            color: AppColors.charcoal,
-                            fontWeight: FontWeight.bold,
-                            fontSize: 14,
+                        primaryYAxis: const NumericAxis(
+                          edgeLabelPlacement: EdgeLabelPlacement.shift,
+                        ),
+                        title: ChartTitle(
+                          text: 'Income vs Expense',
+                          alignment: ChartAlignment.near,
+                          textStyle: TextStyle(
+                            color: AppColors.charcoal.withOpacity(0.8),
+                            fontWeight: FontWeight.w600,
+                            fontSize: 12,
                           ),
                         ),
-                        InkWell(
-                          onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (_) => const StatisticsScreen()));
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(
-                                vertical: 8, horizontal: 6),
-                            child: const Text(
-                              'View Stats ->',
-                              style: TextStyle(
-                                color: AppColors.primary,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 14,
-                                decoration: TextDecoration.underline,
-                                decorationColor: AppColors.primary,
+                        series: <CartesianSeries>[
+                          if (type == 'income' || type == 'all')
+                            SplineAreaSeries<ChartData, DateTime>(
+                              dataSource: incomeData,
+                              name: 'Income',
+                              borderColor: Colors.green.withOpacity(0.7),
+                              borderWidth: 1,
+                              enableTooltip: true,
+                              xValueMapper: (ChartData data, _) => data.date,
+                              yValueMapper: (ChartData data, _) => data.amount,
+                              color: Colors.green.withOpacity(0.3),
+                              markerSettings: const MarkerSettings(
+                                isVisible: false,
                               ),
                             ),
-                          ),
+                          if (type == 'expense' || type == 'all')
+                            SplineAreaSeries<ChartData, DateTime>(
+                              dataSource: expenseData,
+                              name: 'Expense',
+                              borderColor: Colors.red.withOpacity(0.7),
+                              borderWidth: 1,
+                              enableTooltip: true,
+                              xValueMapper: (ChartData data, _) => data.date,
+                              yValueMapper: (ChartData data, _) => data.amount,
+                              color: Colors.red.withOpacity(0.3),
+                              markerSettings: const MarkerSettings(
+                                isVisible: false,
+                              ),
+                            ),
+                        ],
+                        tooltipBehavior: TooltipBehavior(
+                          enable: true,
+                          header: '',
+                          format: 'point.x: point.y',
                         ),
-                      ],
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    const Text(
+                      'Transactions',
+                      style: TextStyle(
+                        color: AppColors.charcoal,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 14,
+                      ),
                     ),
                   ],
                 ),
@@ -343,4 +376,11 @@ class _TransactionsScreenState extends State<TransactionsScreen>
       endDate: dateRange.end.toIso8601String(),
     ));
   }
+}
+
+class ChartData {
+  final DateTime date;
+  final double amount;
+
+  ChartData(this.date, this.amount);
 }

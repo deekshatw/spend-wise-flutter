@@ -135,27 +135,28 @@ class _StatisticsScreen extends State<StatisticsScreen>
       builder: (context, state) {
         if (state is TransactionsInitialFetchSuccessState) {
           List<Widget> children = [];
+
+          final expenseData = state.transactions
+              .where((t) => t.transactionType == 'expense')
+              .map((t) => ChartData(
+                    DateTime.parse(t.date!),
+                    t.amount!.toDouble(),
+                  ))
+              .toList();
+
+          final incomeData = state.transactions
+              .where((t) => t.transactionType == 'income')
+              .map((t) => ChartData(
+                    DateTime.parse(t.date!),
+                    t.amount!.toDouble(),
+                  ))
+              .toList();
           if (type == 'all' && state.transactionSummary != null) {
             // final totalExpenses = state.transactionSummary!.expense;
             // final totalIncomes = state.transactionSummary!.income;
             final balance = state.transactionSummary!.balance;
 
             // Prepare data for the chart
-            final expenseData = state.transactions
-                .where((t) => t.transactionType == 'expense')
-                .map((t) => ChartData(
-                      DateTime.parse(t.date!),
-                      t.amount!.toDouble(),
-                    ))
-                .toList();
-
-            final incomeData = state.transactions
-                .where((t) => t.transactionType == 'income')
-                .map((t) => ChartData(
-                      DateTime.parse(t.date!),
-                      t.amount!.toDouble(),
-                    ))
-                .toList();
 
             children.add(
               Padding(
@@ -245,82 +246,90 @@ class _StatisticsScreen extends State<StatisticsScreen>
                       ],
                     ),
                     // Chart area
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.4,
-                      child: SfCartesianChart(
-                        legend: const Legend(
-                          isVisible: true,
-                          position: LegendPosition.bottom,
-                          overflowMode: LegendItemOverflowMode.wrap,
-                        ),
-                        primaryXAxis: DateTimeAxis(
-                          dateFormat: DateFormat("MMM, dd"),
-                          intervalType: DateTimeIntervalType.days,
-                          edgeLabelPlacement: EdgeLabelPlacement.shift,
-                        ),
-                        primaryYAxis: const NumericAxis(
-                          edgeLabelPlacement: EdgeLabelPlacement.shift,
-                        ),
-                        title: ChartTitle(
-                          text: 'Income vs Expense',
-                          alignment: ChartAlignment.near,
-                          textStyle: TextStyle(
-                            color: AppColors.charcoal.withOpacity(0.8),
-                            fontWeight: FontWeight.w600,
-                            fontSize: 12,
-                          ),
-                        ),
-                        series: <CartesianSeries>[
-                          if (type == 'income' || type == 'all')
-                            SplineAreaSeries<ChartData, DateTime>(
-                              dataSource: incomeData,
-                              name: 'Income',
-                              borderColor: Colors.green.withOpacity(0.7),
-                              borderWidth: 1,
-                              enableTooltip: true,
-                              xValueMapper: (ChartData data, _) => data.date,
-                              yValueMapper: (ChartData data, _) => data.amount,
-                              color: Colors.green.withOpacity(0.3),
-                              markerSettings: const MarkerSettings(
-                                isVisible: false,
-                              ),
-                            ),
-                          if (type == 'expense' || type == 'all')
-                            SplineAreaSeries<ChartData, DateTime>(
-                              dataSource: expenseData,
-                              name: 'Expense',
-                              borderColor: Colors.red.withOpacity(0.7),
-                              borderWidth: 1,
-                              enableTooltip: true,
-                              xValueMapper: (ChartData data, _) => data.date,
-                              yValueMapper: (ChartData data, _) => data.amount,
-                              color: Colors.red.withOpacity(0.3),
-                              markerSettings: const MarkerSettings(
-                                isVisible: false,
-                              ),
-                            ),
-                        ],
-                        tooltipBehavior: TooltipBehavior(
-                          enable: true,
-                          header: '',
-                          format: 'point.x: point.y',
-                        ),
-                      ),
-                    ),
-                    const SizedBox(height: 20),
-                    const Text(
-                      'Transactions',
-                      style: TextStyle(
-                        color: AppColors.charcoal,
-                        fontWeight: FontWeight.bold,
-                        fontSize: 14,
-                      ),
-                    ),
                   ],
                 ),
               ),
             );
           }
+
+          children.add(
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.4,
+                  child: SfCartesianChart(
+                    legend: const Legend(
+                      isVisible: true,
+                      position: LegendPosition.bottom,
+                      overflowMode: LegendItemOverflowMode.wrap,
+                    ),
+                    primaryXAxis: DateTimeAxis(
+                      dateFormat: DateFormat("MMM, dd"),
+                      intervalType: DateTimeIntervalType.days,
+                      edgeLabelPlacement: EdgeLabelPlacement.shift,
+                    ),
+                    primaryYAxis: const NumericAxis(
+                      edgeLabelPlacement: EdgeLabelPlacement.shift,
+                    ),
+                    title: ChartTitle(
+                      text: type == 'all' ? 'Income vs Expense' : '',
+                      alignment: ChartAlignment.near,
+                      textStyle: TextStyle(
+                        color: AppColors.charcoal.withOpacity(0.8),
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
+                      ),
+                    ),
+                    series: <CartesianSeries>[
+                      if (type == 'income' || type == 'all')
+                        SplineAreaSeries<ChartData, DateTime>(
+                          dataSource: incomeData,
+                          name: 'Income',
+                          borderColor: Colors.green.withOpacity(0.7),
+                          borderWidth: 1,
+                          enableTooltip: true,
+                          xValueMapper: (ChartData data, _) => data.date,
+                          yValueMapper: (ChartData data, _) => data.amount,
+                          color: Colors.green.withOpacity(0.3),
+                          markerSettings: const MarkerSettings(
+                            isVisible: false,
+                          ),
+                        ),
+                      if (type == 'expense' || type == 'all')
+                        SplineAreaSeries<ChartData, DateTime>(
+                          dataSource: expenseData,
+                          name: 'Expense',
+                          borderColor: Colors.red.withOpacity(0.7),
+                          borderWidth: 1,
+                          enableTooltip: true,
+                          xValueMapper: (ChartData data, _) => data.date,
+                          yValueMapper: (ChartData data, _) => data.amount,
+                          color: Colors.red.withOpacity(0.3),
+                          markerSettings: const MarkerSettings(
+                            isVisible: false,
+                          ),
+                        ),
+                    ],
+                    tooltipBehavior: TooltipBehavior(
+                      enable: true,
+                      header: '',
+                      format: 'point.x: point.y',
+                    ),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                const Text(
+                  'Transactions',
+                  style: TextStyle(
+                    color: AppColors.charcoal,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 14,
+                  ),
+                ),
+              ],
+            ),
+          );
 
           // Add the transaction items below the summary
           children.add(

@@ -210,7 +210,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                           ),
                           builder: (BuildContext context) {
                             return Container(
-                              height: MediaQuery.of(context).size.height * 0.85,
+                              height: MediaQuery.of(context).size.height,
                               child: CategoriesBottomSheet(
                                 onCategorySelected: (category) {
                                   setState(() {
@@ -246,6 +246,7 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                         );
                       },
                     ),
+                    const SizedBox(height: 30),
                   ],
                 ),
               ),

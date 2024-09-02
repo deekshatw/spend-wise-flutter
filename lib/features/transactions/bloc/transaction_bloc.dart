@@ -16,6 +16,7 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
     on<TransactionsInitialFetchEvent>(transactionsInitialFetchEvent);
     on<TransactionCategoriesFetchEvent>(transactionCategoriesFetchEvent);
     on<TransactionCreateTransactionEvent>(transactionCreateTransactionEvent);
+    on<TransactionCreateCategoryEvent>(transactionCreateCategoryEvent);
   }
 
   Future<FutureOr<void>> transactionsInitialFetchEvent(
@@ -64,6 +65,16 @@ class TransactionBloc extends Bloc<TransactionEvent, TransactionState> {
     emit(TransactionLoading());
     try {
       TransactionRepo.addTransaction(event.body, event.context);
+    } catch (err) {
+      emit(TransactionErrorState(err.toString()));
+    }
+  }
+
+  FutureOr<void> transactionCreateCategoryEvent(
+      TransactionCreateCategoryEvent event, Emitter<TransactionState> emit) {
+    emit(TransactionLoading());
+    try {
+      TransactionRepo.addCategory(event.body, event.context);
     } catch (err) {
       emit(TransactionErrorState(err.toString()));
     }

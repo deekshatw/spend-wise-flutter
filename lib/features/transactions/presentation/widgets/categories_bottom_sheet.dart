@@ -7,10 +7,10 @@ import 'package:spend_wise/core/widgets/loader_widget.dart';
 import 'package:spend_wise/core/widgets/primary_button.dart';
 import 'package:spend_wise/features/transactions/bloc/transaction_bloc.dart';
 import 'package:spend_wise/features/transactions/data/models/category.dart';
+import 'package:spend_wise/features/transactions/presentation/widgets/add_category_bottom_sheet.dart';
 
 class CategoriesBottomSheet extends StatefulWidget {
-  final Function(Category)
-      onCategorySelected; // Change this to pass the whole category
+  final Function(Category) onCategorySelected;
 
   const CategoriesBottomSheet({super.key, required this.onCategorySelected});
 
@@ -20,7 +20,7 @@ class CategoriesBottomSheet extends StatefulWidget {
 
 class _CategoriesBottomSheetState extends State<CategoriesBottomSheet> {
   TransactionBloc bloc = TransactionBloc();
-  Category _selectedCategory = Category(); // Store the entire category model
+  Category _selectedCategory = Category();
 
   @override
   void initState() {
@@ -41,13 +41,60 @@ class _CategoriesBottomSheetState extends State<CategoriesBottomSheet> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  'Choose your category',
-                  style: TextStyle(
-                    fontSize: 18,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.charcoal.withOpacity(0.8),
-                  ),
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Text(
+                      'Choose your category',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: AppColors.charcoal.withOpacity(0.8),
+                      ),
+                    ),
+                    ElevatedButton(
+                      onPressed: () {
+                        showModalBottomSheet(
+                          context: context,
+                          backgroundColor: Colors.white,
+                          isScrollControlled: true,
+                          showDragHandle: true,
+                          shape: const RoundedRectangleBorder(
+                            borderRadius:
+                                BorderRadius.vertical(top: Radius.circular(20)),
+                          ),
+                          builder: (BuildContext context) {
+                            return SizedBox(
+                              height: MediaQuery.of(context).size.height * 0.4,
+                              child: const AddCategoryBottomSheet(),
+                            );
+                          },
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: AppColors.primary,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                      ),
+                      child: const Row(
+                        children: [
+                          Text(
+                            'Add',
+                            style: TextStyle(
+                              color: AppColors.white,
+                              fontSize: 16,
+                            ),
+                          ),
+                          Icon(
+                            Icons.add,
+                            color: AppColors.white,
+                            size: 16,
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
                 ),
                 const SizedBox(height: 12),
                 Expanded(

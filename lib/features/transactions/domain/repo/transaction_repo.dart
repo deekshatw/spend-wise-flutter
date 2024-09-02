@@ -99,6 +99,42 @@ class TransactionRepo {
     }
   }
 
+  static Future<bool> addCategory(
+      Map<String, dynamic> body, BuildContext context) async {
+    String? token = await SharedPrefs.getUserTokenSharedPreference();
+
+    String url = '${Utils.BASE_URL}category/create';
+    print(body);
+    try {
+      final response = await http.post(
+        Uri.parse(url),
+        headers: {
+          'Authorization': 'Bearer $token',
+        },
+        body: jsonEncode(body),
+      );
+      print(response.body);
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            backgroundColor: Colors.green,
+            content: Text('Category added successfully'),
+          ),
+        );
+        Navigator.pop(context);
+
+        print('Category added successfully');
+        return true;
+      } else {
+        print('Category add failed');
+        return false;
+      }
+    } catch (err) {
+      print('Category add failed: $err');
+      return false;
+    }
+  }
+
   static Future<bool> addTransaction(
       Map<String, dynamic> body, BuildContext context) async {
     String url = '${Utils.BASE_URL}transaction/create';

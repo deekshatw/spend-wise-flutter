@@ -20,3 +20,10 @@ class TransactionCreateTransactionEvent extends TransactionEvent {
 
   TransactionCreateTransactionEvent(this.body, this.context);
 }
+
+class TransactionCreateCategoryEvent extends TransactionEvent {
+  final Map<String, dynamic> body;
+  final BuildContext context;
+
+  TransactionCreateCategoryEvent(this.body, this.context);
+}

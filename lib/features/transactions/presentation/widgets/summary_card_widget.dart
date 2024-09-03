@@ -15,70 +15,55 @@ class SummaryCardWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        // Navigator.of(context).pushNamed(route);
-      },
-      splashColor: AppColors.primary.withOpacity(0.17),
-      child: Container(
-        padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-        decoration: BoxDecoration(
-          color: AppColors.gray.withOpacity(0.1),
-          borderRadius: BorderRadius.circular(10),
-          boxShadow: [
-            BoxShadow(
-              color: AppColors.gray.withOpacity(0.1),
-              blurRadius: 3,
-              offset: const Offset(0, 5),
+    return Container(
+      padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
+      decoration: BoxDecoration(
+        color: AppColors.gray.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(10),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.orchidPink.withOpacity(0.1),
+            blurRadius: 3,
+            offset: const Offset(0, 4),
+          ),
+        ],
+      ),
+      child: Row(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              color: color.withOpacity(0.1),
+              borderRadius: BorderRadius.circular(10),
             ),
-          ],
-        ),
-        child: Row(
-          children: [
-            Container(
-              decoration: BoxDecoration(
-                color: color.withOpacity(0.1),
-                borderRadius: BorderRadius.circular(10),
-              ),
-              padding: const EdgeInsets.all(10),
-              child: Icon(
-                icon,
-                color: color,
-              ),
+            padding: const EdgeInsets.all(10),
+            child: Icon(
+              icon,
+              color: color,
             ),
-            const SizedBox(width: 10),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Row(
-                  children: [
-                    Text(
-                      label,
-                      style: TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 14,
-                        color: AppColors.charcoal.withOpacity(0.8),
-                      ),
-                    ),
-                    Icon(
-                      Icons.keyboard_arrow_right_rounded,
-                      color: AppColors.charcoal,
-                      size: 18,
-                    )
-                  ],
+          ),
+          const SizedBox(width: 10),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                label,
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 14,
+                  color: AppColors.charcoal.withOpacity(0.8),
                 ),
-                Text(
-                  '\$$value',
-                  style: const TextStyle(
-                    fontSize: 19,
-                    fontWeight: FontWeight.bold,
-                    color: AppColors.charcoal,
-                  ),
+              ),
+              Text(
+                '\$$value',
+                style: const TextStyle(
+                  fontSize: 19,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.charcoal,
                 ),
-              ],
-            ),
-          ],
-        ),
+              ),
+            ],
+          ),
+        ],
       ),
     );
   }

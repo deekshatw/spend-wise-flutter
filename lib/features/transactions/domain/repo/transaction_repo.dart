@@ -9,6 +9,7 @@ import 'package:spend_wise/features/transactions/data/models/category.dart';
 import 'package:spend_wise/features/transactions/data/models/transaction.dart';
 import 'package:http/http.dart' as http;
 import 'package:spend_wise/features/transactions/data/models/transaction_summary.dart';
+import 'package:spend_wise/features/transactions/presentation/widgets/categories_bottom_sheet.dart';
 
 class TransactionRepo {
   static Future<List<Transaction>> getTransactions(
@@ -111,10 +112,11 @@ class TransactionRepo {
         headers: {
           'Authorization': 'Bearer $token',
         },
-        body: jsonEncode(body),
+        body: body,
       );
       print(response.body);
       if (response.statusCode == 200 || response.statusCode == 201) {
+        Navigator.pop(context);
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(
             backgroundColor: Colors.green,
@@ -123,9 +125,32 @@ class TransactionRepo {
         );
         Navigator.pop(context);
 
+        showModalBottomSheet(
+            context: context,
+            backgroundColor: Colors.white,
+            isScrollControlled: true,
+            showDragHandle: true,
+            shape: const RoundedRectangleBorder(
+              borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+            ),
+            builder: (BuildContext context) {
+              return Container(
+                height: MediaQuery.of(context).size.height,
+                child: CategoriesBottomSheet(
+                  onCategorySelected: (category) {},
+                  isNewCategoryCreated: true,
+                ),
+              );
+            });
         print('Category added successfully');
         return true;
       } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            backgroundColor: Colors.red,
+            content: Text(jsonDecode(response.body)['message']),
+          ),
+        );
         print('Category add failed');
         return false;
       }

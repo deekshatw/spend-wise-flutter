@@ -38,6 +38,12 @@ class AddCategoryBottomSheet extends StatelessWidget {
                           controller: _titleController,
                           label: 'Add your title here',
                           isPassword: false,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Title cannot be empty';
+                            }
+                            return null;
+                          },
                         ),
                         const SizedBox(height: 8),
                         const LabelWidget(
@@ -49,6 +55,12 @@ class AddCategoryBottomSheet extends StatelessWidget {
                           label: 'Add your description here',
                           keyboardType: TextInputType.multiline,
                           isPassword: false,
+                          validator: (value) {
+                            if (value!.isEmpty) {
+                              return 'Description cannot be empty';
+                            }
+                            return null;
+                          },
                         ),
                       ],
                     )),

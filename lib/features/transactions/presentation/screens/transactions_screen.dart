@@ -231,7 +231,7 @@ class _TransactionsScreenState extends State<TransactionsScreen>
                     ),
                     const SizedBox(height: 10),
                     Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         SummaryCardWidget(
                           label: 'Income',

@@ -34,12 +34,13 @@ class TransactionItemWidget extends StatelessWidget {
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Icon(
-                    transaction.transactionType == 'income'
-                        ? Icons.arrow_upward_rounded
-                        : Icons.arrow_downward_rounded,
-                    color: transaction.transactionType == 'income'
-                        ? Colors.green
-                        : Colors.red),
+                  transaction.transactionType == 'income'
+                      ? Icons.arrow_upward_rounded
+                      : Icons.arrow_downward_rounded,
+                  color: transaction.transactionType == 'income'
+                      ? Colors.green
+                      : Colors.red,
+                ),
               ),
               const SizedBox(width: 10),
               Column(

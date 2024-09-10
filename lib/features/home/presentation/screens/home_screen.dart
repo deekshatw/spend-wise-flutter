@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:spend_wise/core/utils/colors.dart';
+import 'package:spend_wise/features/budgets/presentation/screens/budgets_screen.dart';
 import 'package:spend_wise/features/dashboard/presentation/screens/dashboard_screen.dart';
 import 'package:spend_wise/features/profile/presentation/screens/profile_screen.dart';
 import 'package:spend_wise/features/transactions/presentation/screens/transactions_screen.dart';
@@ -21,6 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
   static const List<Widget> _widgetOptions = <Widget>[
     DashboardScreen(),
     TransactionsScreen(),
+    BudgetsScreen(),
     ProfileScreen(),
   ];
 
@@ -45,6 +47,8 @@ class _HomeScreenState extends State<HomeScreen> {
           fontWeight: FontWeight.bold,
         ),
         selectedItemColor: AppColors.primary,
+        showUnselectedLabels: true,
+        unselectedItemColor: AppColors.charcoal.withOpacity(0.7),
         items: const <BottomNavigationBarItem>[
           BottomNavigationBarItem(
             icon: Icon(Icons.dashboard),
@@ -53,6 +57,10 @@ class _HomeScreenState extends State<HomeScreen> {
           BottomNavigationBarItem(
             icon: Icon(Icons.monetization_on),
             label: 'Transactions',
+          ),
+          BottomNavigationBarItem(
+            icon: Icon(Icons.money_off),
+            label: 'Budgets',
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.person),

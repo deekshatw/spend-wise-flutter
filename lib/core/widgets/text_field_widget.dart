@@ -30,6 +30,7 @@ class _TextFieldWidgetState extends State<TextFieldWidget> {
       controller: widget.controller,
       obscureText: widget.isPassword ? _isObscured : false,
       validator: widget.validator,
+      keyboardType: widget.keyboardType,
       decoration: InputDecoration(
         labelText: widget.label,
         labelStyle: TextStyle(

@@ -131,7 +131,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.8,
                         child: Text(
-                          'Login now to continue using Spend Ease',
+                          'Login now to continue using Spend Wise',
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w400,

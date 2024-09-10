@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:simple_animation_progress_bar/simple_animation_progress_bar.dart';
 import 'package:spend_wise/core/utils/colors.dart';
 import 'package:spend_wise/features/budgets/data/models/budget_model.dart';
@@ -30,38 +31,60 @@ class BudgetItemWidget extends StatelessWidget {
                   const SizedBox(
                     width: 10,
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        budget.category!.name.toString(),
-                        style: const TextStyle(
-                          fontSize: 17,
-                          fontWeight: FontWeight.w600,
-                          color: AppColors.charcoal,
+                  SizedBox(
+                    width: MediaQuery.of(context).size.width * 0.45,
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Text(
+                          budget.category!.name.toString(),
+                          style: const TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w600,
+                            color: AppColors.charcoal,
+                          ),
                         ),
-                      ),
-                      Row(
-                        children: [
-                          Text(
-                            '${budget.percentageSpent}%',
-                            style: TextStyle(
+                        Row(
+                          children: [
+                            Text(
+                              '${budget.percentageSpent}%',
+                              style: const TextStyle(
+                                fontSize: 14,
+                                color: AppColors.charcoal,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                            Text(
+                              ' already spent',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: AppColors.charcoal.withOpacity(0.7),
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                        const SizedBox(
+                          height: 5,
+                        ),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              vertical: 5, horizontal: 10),
+                          decoration: BoxDecoration(
+                            color: AppColors.primary.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(10),
+                          ),
+                          child: Text(
+                            '${DateFormat('MMM dd').format(DateTime.parse(budget.startDate.toString()))} - ${DateFormat('MMM dd').format(DateTime.parse(budget.endDate.toString()))}',
+                            style: const TextStyle(
                               fontSize: 14,
                               color: AppColors.charcoal,
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          Text(
-                            ' already spent',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: AppColors.charcoal.withOpacity(0.7),
                               fontWeight: FontWeight.w600,
                             ),
                           ),
-                        ],
-                      ),
-                    ],
+                        ),
+                      ],
+                    ),
                   ),
                 ],
               ),
@@ -70,10 +93,15 @@ class BudgetItemWidget extends StatelessWidget {
                 children: [
                   Text(
                     '\$${budget.spent}',
-                    style: const TextStyle(
+                    style: TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
-                      color: Colors.red,
+                      color: budget.percentageSpent! >= 50 &&
+                              budget.percentageSpent! < 75
+                          ? Colors.deepOrangeAccent
+                          : budget.percentageSpent! >= 75
+                              ? Colors.red
+                              : Colors.blueAccent,
                     ),
                   ),
                   Text(
@@ -95,7 +123,12 @@ class BudgetItemWidget extends StatelessWidget {
             height: 5,
             width: 300,
             backgroundColor: AppColors.roseTaupe.withOpacity(0.3),
-            foregrondColor: AppColors.roseTaupe,
+            foregrondColor:
+                budget.percentageSpent! >= 50 && budget.percentageSpent! < 75
+                    ? Colors.deepOrangeAccent
+                    : budget.percentageSpent! >= 75
+                        ? Colors.red
+                        : Colors.blueAccent,
             ratio: budget.percentageSpent! / 100,
             direction: Axis.horizontal,
             curve: Curves.fastLinearToSlowEaseIn,

@@ -12,6 +12,7 @@ part 'budget_state.dart';
 class BudgetBloc extends Bloc<BudgetEvent, BudgetState> {
   BudgetBloc() : super(BudgetInitial()) {
     on<BudgetInitialBudgetsFetchEvent>(budgetInitialBudgetsFetchEvent);
+    on<BudgetAddNewBudgetEvent>(budgetAddNewBudgetEvent);
   }
 
   FutureOr<void> budgetInitialBudgetsFetchEvent(
@@ -24,6 +25,17 @@ class BudgetBloc extends Bloc<BudgetEvent, BudgetState> {
           : BudgetEmptyState());
     } catch (error) {
       emit(BudgetErrorState(error.toString()));
+    }
+  }
+
+  FutureOr<void> budgetAddNewBudgetEvent(
+      BudgetAddNewBudgetEvent event, Emitter<BudgetState> emit) {
+    emit(BudgetLoadingState());
+    try {
+      BudgetRepo().addbudget(event.body, event.context);
+    } catch (error) {
+      emit(BudgetErrorState(error.toString()));
+      rethrow;
     }
   }
 }

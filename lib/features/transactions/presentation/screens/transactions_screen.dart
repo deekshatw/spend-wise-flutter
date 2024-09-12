@@ -56,7 +56,7 @@ class _TransactionsScreenState extends State<TransactionsScreen>
       appBar: AppBar(
         automaticallyImplyLeading: false,
         title: const Text(
-          'Transactions',
+          'Activity',
           style: TextStyle(
             color: AppColors.charcoal,
             fontWeight: FontWeight.w600,

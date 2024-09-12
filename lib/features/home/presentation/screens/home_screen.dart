@@ -1,35 +1,37 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:spend_wise/core/utils/colors.dart';
 import 'package:spend_wise/features/budgets/presentation/screens/budgets_screen.dart';
 import 'package:spend_wise/features/dashboard/presentation/screens/dashboard_screen.dart';
+import 'package:spend_wise/features/goals/presentation/screens/goals_screen.dart';
+import 'package:spend_wise/features/home/presentation/widgets/menu_item_icon.dart';
 import 'package:spend_wise/features/profile/presentation/screens/profile_screen.dart';
 import 'package:spend_wise/features/transactions/presentation/screens/transactions_screen.dart';
 
 class HomeScreen extends StatefulWidget {
-  final int initialIndex; // Add this parameter
+  final int initialIndex;
 
-  const HomeScreen(
-      {super.key, this.initialIndex = 0}); // Default to 0 (Dashboard)
+  const HomeScreen({super.key, this.initialIndex = 0});
 
   @override
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late int _selectedIndex; // Use late initialization
+  late int _selectedIndex;
 
   static const List<Widget> _widgetOptions = <Widget>[
     DashboardScreen(),
     TransactionsScreen(),
     BudgetsScreen(),
+    GoalsScreen(),
     ProfileScreen(),
   ];
 
   @override
   void initState() {
     super.initState();
-    // Set the initial index based on the passed parameter
     _selectedIndex = widget.initialIndex;
   }
 
@@ -43,27 +45,47 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
         selectedLabelStyle: const TextStyle(
-          fontWeight: FontWeight.bold,
+          fontWeight: FontWeight.w600,
         ),
         selectedItemColor: AppColors.primary,
         showUnselectedLabels: true,
         unselectedItemColor: AppColors.charcoal.withOpacity(0.7),
-        items: const <BottomNavigationBarItem>[
+        items: <BottomNavigationBarItem>[
           BottomNavigationBarItem(
-            icon: Icon(Icons.dashboard),
-            label: 'Dashboard',
+            icon: MenuItemIcon(
+              isSelected: _selectedIndex == 0,
+              icon: HugeIcons.strokeRoundedHome01,
+            ),
+            label: 'Home',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.monetization_on),
-            label: 'Transactions',
+            icon: MenuItemIcon(
+              isSelected: _selectedIndex == 1,
+              icon: HugeIcons.strokeRoundedSquareArrowDataTransferHorizontal,
+            ),
+            label: 'Activity',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.money_off),
+            icon: MenuItemIcon(
+              isSelected: _selectedIndex == 2,
+              icon: HugeIcons.strokeRoundedMoneyReceiveCircle,
+            ),
             label: 'Budgets',
           ),
           BottomNavigationBarItem(
-            icon: Icon(Icons.person),
+            icon: MenuItemIcon(
+              isSelected: _selectedIndex == 3,
+              icon: HugeIcons.strokeRoundedPiggyBank,
+            ),
+            label: 'Goals',
+          ),
+          BottomNavigationBarItem(
+            icon: MenuItemIcon(
+              isSelected: _selectedIndex == 4,
+              icon: HugeIcons.strokeRoundedUser,
+            ),
             label: 'Profile',
           ),
         ],

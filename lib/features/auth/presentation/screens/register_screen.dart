@@ -78,7 +78,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       SizedBox(
                         width: MediaQuery.of(context).size.width * 0.8,
                         child: Text(
-                          'Welcome to Spend Ease!',
+                          'Welcome to Spend Wise!',
                           style: TextStyle(
                             fontSize: 15,
                             fontWeight: FontWeight.w400,

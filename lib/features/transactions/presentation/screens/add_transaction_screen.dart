@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:intl/intl.dart';
 import 'package:spend_wise/core/shared_prefs/shared_prefs.dart';
 import 'package:spend_wise/core/utils/colors.dart';
@@ -169,61 +170,87 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                     const SizedBox(height: 8),
                     const LabelWidget(label: 'Category', isRequired: true),
                     if (selectedCategory != null)
-                      Column(
-                        children: [
-                          Text(
-                            selectedCategory.toString(),
-                            style: TextStyle(
-                              fontSize: 16,
-                              color: AppColors.charcoal,
-                              fontWeight: FontWeight.w600,
-                            ),
-                          ),
-                          const SizedBox(height: 8),
-                        ],
-                      ),
-                    ListTile(
-                      title: Text(selectedCategory != null
-                          ? "Change Category"
-                          : 'Select a category'),
-                      tileColor: AppColors.gray.withOpacity(0.1),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      leading: Icon(
-                        Icons.category_outlined,
-                        color: AppColors.charcoal.withOpacity(0.8),
-                      ),
-                      trailing: const Icon(
-                        Icons.arrow_forward_ios,
-                        size: 12,
-                      ),
-                      onTap: () {
-                        showModalBottomSheet(
-                          context: context,
-                          backgroundColor: Colors.white,
-                          isScrollControlled: true,
-                          showDragHandle: true,
-                          shape: const RoundedRectangleBorder(
-                            borderRadius:
-                                BorderRadius.vertical(top: Radius.circular(20)),
-                          ),
-                          builder: (BuildContext context) {
-                            return Container(
-                              height: MediaQuery.of(context).size.height,
-                              child: CategoriesBottomSheet(
-                                onCategorySelected: (category) {
-                                  setState(() {
-                                    selectedCategory = category.name;
-                                  });
-                                  selectedCategoryId = category.categoryId;
-                                },
+                      InkWell(
+                        onTap: () {
+                          setState(() {
+                            selectedCategory = null;
+                          });
+                        },
+                        child: Column(
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.all(10),
+                              decoration: BoxDecoration(
+                                color: AppColors.primary.withOpacity(0.2),
+                                borderRadius: BorderRadius.circular(10),
                               ),
-                            );
-                          },
-                        );
-                      },
-                    ),
+                              child: Row(
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    selectedCategory.toString(),
+                                    style: const TextStyle(
+                                      fontSize: 16,
+                                      color: AppColors.charcoal,
+                                      fontWeight: FontWeight.w600,
+                                    ),
+                                  ),
+                                  Icon(Icons.close,
+                                      color:
+                                          AppColors.charcoal.withOpacity(0.8)),
+                                ],
+                              ),
+                            ),
+                            const SizedBox(height: 8),
+                          ],
+                        ),
+                      ),
+                    selectedCategory == null
+                        ? ListTile(
+                            title: Text(selectedCategory != null
+                                ? "Change Category"
+                                : 'Select a category'),
+                            tileColor: AppColors.gray.withOpacity(0.1),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            leading: HugeIcon(
+                              icon: HugeIcons.strokeRoundedLabelImportant,
+                              color: Colors.black,
+                              size: 24.0,
+                            ),
+                            trailing: const Icon(
+                              Icons.arrow_forward_ios,
+                              size: 12,
+                            ),
+                            onTap: () {
+                              showModalBottomSheet(
+                                context: context,
+                                backgroundColor: Colors.white,
+                                isScrollControlled: true,
+                                showDragHandle: true,
+                                shape: const RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.vertical(
+                                      top: Radius.circular(20)),
+                                ),
+                                builder: (BuildContext context) {
+                                  return Container(
+                                    height: MediaQuery.of(context).size.height,
+                                    child: CategoriesBottomSheet(
+                                      onCategorySelected: (category) {
+                                        setState(() {
+                                          selectedCategory = category.name;
+                                        });
+                                        selectedCategoryId =
+                                            category.categoryId;
+                                      },
+                                    ),
+                                  );
+                                },
+                              );
+                            },
+                          )
+                        : SizedBox(),
                     const SizedBox(height: 30),
                     PrimaryButton(
                       label: 'Add Transaction',

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:intl/intl.dart';
 import 'package:simple_animation_progress_bar/simple_animation_progress_bar.dart';
 import 'package:spend_wise/core/utils/colors.dart';
@@ -24,9 +25,10 @@ class BudgetItemWidget extends StatelessWidget {
             children: [
               Row(
                 children: [
-                  const Icon(
-                    Icons.category,
+                  HugeIcon(
+                    icon: HugeIcons.strokeRoundedMoneyBag01,
                     color: AppColors.primary,
+                    size: MediaQuery.of(context).size.width * 0.08,
                   ),
                   const SizedBox(
                     width: 10,
@@ -46,12 +48,18 @@ class BudgetItemWidget extends StatelessWidget {
                         ),
                         Row(
                           children: [
-                            Text(
-                              '${budget.percentageSpent}%',
-                              style: const TextStyle(
-                                fontSize: 14,
-                                color: AppColors.charcoal,
-                                fontWeight: FontWeight.bold,
+                            Container(
+                              constraints: BoxConstraints(
+                                maxWidth:
+                                    MediaQuery.of(context).size.width * 0.14,
+                              ),
+                              child: Text(
+                                '${budget.percentageSpent.toStringAsFixed(2)}%',
+                                style: const TextStyle(
+                                  fontSize: 14,
+                                  color: AppColors.charcoal,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
                             Text(

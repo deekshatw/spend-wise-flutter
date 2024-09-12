@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:intl/intl.dart';
 import 'package:spend_wise/core/helpers/show_date_picker.dart';
 import 'package:spend_wise/core/shared_prefs/shared_prefs.dart';
@@ -122,9 +123,10 @@ class _AddBudgetScreenState extends State<AddBudgetScreen> {
                             shape: RoundedRectangleBorder(
                               borderRadius: BorderRadius.circular(10),
                             ),
-                            leading: Icon(
-                              Icons.category_outlined,
-                              color: AppColors.charcoal.withOpacity(0.8),
+                            leading: const HugeIcon(
+                              icon: HugeIcons.strokeRoundedLabelImportant,
+                              color: Colors.black,
+                              size: 24.0,
                             ),
                             trailing: const Icon(
                               Icons.arrow_forward_ios,

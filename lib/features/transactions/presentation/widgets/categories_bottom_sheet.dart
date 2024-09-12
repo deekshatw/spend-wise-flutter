@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hugeicons/hugeicons.dart';
 import 'package:spend_wise/core/utils/colors.dart';
 import 'package:spend_wise/core/widgets/loader_widget.dart';
 import 'package:spend_wise/core/widgets/primary_button.dart';
@@ -114,9 +115,10 @@ class _CategoriesBottomSheetState extends State<CategoriesBottomSheet> {
                             ),
                             child: Row(
                               children: [
-                                const Icon(
-                                  Icons.category,
+                                HugeIcon(
+                                  icon: HugeIcons.strokeRoundedLabelImportant,
                                   color: AppColors.roseTaupe,
+                                  size: 24.0,
                                 ),
                                 const SizedBox(width: 12),
                                 Column(
@@ -228,7 +230,7 @@ class _CategoriesBottomSheetState extends State<CategoriesBottomSheet> {
                     onTap: () {
                       showModalBottomSheet(
                         context: context,
-                        backgroundColor: Colors.white,
+                        // backgroundColor: Colors.white,
                         isScrollControlled: true,
                         showDragHandle: true,
                         shape: const RoundedRectangleBorder(

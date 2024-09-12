@@ -21,18 +21,18 @@ class BudgetRepo {
       });
       print(response.body);
       if (response.statusCode == 200) {
-        print('Categories fetched successfully');
+        print('Budgets fetched successfully');
         for (var category in jsonDecode(response.body)['data']) {
           categories.add(BudgetModel.fromJson(category));
         }
         print(categories.first);
         return categories;
       } else {
-        print('Categories fetch failed');
+        print('Budgets fetch failed');
         return [];
       }
     } catch (err) {
-      print('Categories fetch failed: $err');
+      // throw Exception('Budgets fetch failed: $err');
       return [];
     }
   }

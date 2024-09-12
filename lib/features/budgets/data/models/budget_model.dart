@@ -1,9 +1,9 @@
 class BudgetModel {
   String? budgetId;
-  int? amount;
-  int? spent;
-  int? remaining;
-  int? percentageSpent;
+  dynamic amount;
+  dynamic spent;
+  dynamic remaining;
+  dynamic percentageSpent;
   Category? category;
   String? startDate;
   String? endDate;

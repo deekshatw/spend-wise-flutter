@@ -25,6 +25,7 @@ class BudgetBloc extends Bloc<BudgetEvent, BudgetState> {
           : BudgetEmptyState());
     } catch (error) {
       emit(BudgetErrorState(error.toString()));
+      rethrow;
     }
   }
 

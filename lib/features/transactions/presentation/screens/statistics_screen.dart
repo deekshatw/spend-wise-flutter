@@ -54,7 +54,7 @@ class _StatisticsScreen extends State<StatisticsScreen>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // automaticallyImplyLeading: false,
+        automaticallyImplyLeading: false,
         title: const Text(
           'Statistics',
           style: TextStyle(

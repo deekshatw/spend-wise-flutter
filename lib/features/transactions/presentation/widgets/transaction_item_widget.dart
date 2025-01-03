@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:intl/intl.dart';
 import 'package:spend_wise/core/utils/colors.dart';
 import 'package:spend_wise/features/transactions/data/models/transaction.dart';
@@ -86,16 +85,18 @@ class TransactionItemWidget extends StatelessWidget {
           Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Text(
-                transaction.transactionType == 'income'
-                    ? " + \$${transaction.amount.toString()}"
-                    : " - \$${transaction.amount.toString()}",
-                style: TextStyle(
-                  color: transaction.transactionType == 'income'
-                      ? Colors.green
-                      : Colors.red,
-                  fontWeight: FontWeight.w600,
-                  fontSize: 18,
+              SizedBox(
+                child: Text(
+                  transaction.transactionType == 'income'
+                      ? " + \$${transaction.amount.toString()}"
+                      : " - \$${transaction.amount.toString()}",
+                  style: TextStyle(
+                    color: transaction.transactionType == 'income'
+                        ? Colors.green
+                        : Colors.red,
+                    fontWeight: FontWeight.w600,
+                    fontSize: 17,
+                  ),
                 ),
               ),
               Text(

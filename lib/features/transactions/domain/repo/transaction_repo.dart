@@ -1,13 +1,12 @@
 import 'dart:convert';
 
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 import 'package:spend_wise/core/shared_prefs/shared_prefs.dart';
 import 'package:spend_wise/core/utils/utils.dart';
 import 'package:spend_wise/features/home/presentation/screens/home_screen.dart';
 import 'package:spend_wise/features/transactions/data/models/category.dart';
 import 'package:spend_wise/features/transactions/data/models/transaction.dart';
-import 'package:http/http.dart' as http;
 import 'package:spend_wise/features/transactions/data/models/transaction_summary.dart';
 import 'package:spend_wise/features/transactions/presentation/widgets/categories_bottom_sheet.dart';
 
@@ -183,7 +182,7 @@ class TransactionRepo {
             context,
             MaterialPageRoute(
                 builder: (_) => const HomeScreen(
-                      initialIndex: 1,
+                      initialIndex: 0,
                     )));
         print('Transaction added successfully');
         return true;

@@ -22,9 +22,9 @@ class AddTransactionScreen extends StatefulWidget {
 
 class _AddTransactionScreenState extends State<AddTransactionScreen> {
   TransactionBloc bloc = TransactionBloc();
-  TextEditingController _titleController = TextEditingController();
-  TextEditingController _descController = TextEditingController();
-  TextEditingController _amountController = TextEditingController();
+  final TextEditingController _titleController = TextEditingController();
+  final TextEditingController _descController = TextEditingController();
+  final TextEditingController _amountController = TextEditingController();
   DateTime _selectedDate = DateTime.now();
   String _selectedChoice = 'expense';
   String? selectedCategory;
@@ -260,13 +260,16 @@ class _AddTransactionScreenState extends State<AddTransactionScreen> {
                         bloc.add(
                           TransactionCreateTransactionEvent(
                             {
-                              "amount": _amountController.text,
-                              "description": _descController.text,
-                              "title": _titleController.text,
-                              "date": _selectedDate.toString(),
-                              "userId": userId,
-                              "categoryId": selectedCategoryId,
-                              "transactionType": _selectedChoice
+                              "transaction": {
+                                "amount": _amountController.text,
+                                "description": _descController.text,
+                                "title": _titleController.text,
+                                "date": _selectedDate.toString(),
+                                "userId": userId,
+                                "categoryId": selectedCategoryId,
+                                "transactionType": _selectedChoice
+                              },
+                              "userAction": "increase-budget"
                             },
                             context,
                           ),

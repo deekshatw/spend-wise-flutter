@@ -56,7 +56,7 @@ class SummaryCardWidget extends StatelessWidget {
               Text(
                 '\$$value',
                 style: const TextStyle(
-                  fontSize: 19,
+                  fontSize: 17,
                   fontWeight: FontWeight.bold,
                   color: AppColors.charcoal,
                 ),

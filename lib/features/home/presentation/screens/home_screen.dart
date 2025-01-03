@@ -1,12 +1,10 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:hugeicons/hugeicons.dart';
 import 'package:spend_wise/core/utils/colors.dart';
 import 'package:spend_wise/features/budgets/presentation/screens/budgets_screen.dart';
-import 'package:spend_wise/features/dashboard/presentation/screens/dashboard_screen.dart';
-import 'package:spend_wise/features/goals/presentation/screens/goals_screen.dart';
 import 'package:spend_wise/features/home/presentation/widgets/menu_item_icon.dart';
 import 'package:spend_wise/features/profile/presentation/screens/profile_screen.dart';
+import 'package:spend_wise/features/transactions/presentation/screens/statistics_screen.dart';
 import 'package:spend_wise/features/transactions/presentation/screens/transactions_screen.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -22,10 +20,11 @@ class _HomeScreenState extends State<HomeScreen> {
   late int _selectedIndex;
 
   static const List<Widget> _widgetOptions = <Widget>[
-    DashboardScreen(),
+    // DashboardScreen(),
     TransactionsScreen(),
     BudgetsScreen(),
-    GoalsScreen(),
+    // GoalsScreen(),
+    StatisticsScreen(),
     ProfileScreen(),
   ];
 
@@ -53,37 +52,38 @@ class _HomeScreenState extends State<HomeScreen> {
         showUnselectedLabels: true,
         unselectedItemColor: AppColors.charcoal.withOpacity(0.7),
         items: <BottomNavigationBarItem>[
+          // BottomNavigationBarItem(
+          //   icon: MenuItemIcon(
+          //     isSelected: _selectedIndex == 0,
+          //     icon: HugeIcons.strokeRoundedHome01,
+          //   ),
+          //   label: 'Home',
+          // ),
           BottomNavigationBarItem(
             icon: MenuItemIcon(
               isSelected: _selectedIndex == 0,
-              icon: HugeIcons.strokeRoundedHome01,
-            ),
-            label: 'Home',
-          ),
-          BottomNavigationBarItem(
-            icon: MenuItemIcon(
-              isSelected: _selectedIndex == 1,
               icon: HugeIcons.strokeRoundedSquareArrowDataTransferHorizontal,
             ),
             label: 'Activity',
           ),
           BottomNavigationBarItem(
             icon: MenuItemIcon(
-              isSelected: _selectedIndex == 2,
+              isSelected: _selectedIndex == 1,
               icon: HugeIcons.strokeRoundedMoneyReceiveCircle,
             ),
             label: 'Budgets',
           ),
           BottomNavigationBarItem(
             icon: MenuItemIcon(
-              isSelected: _selectedIndex == 3,
-              icon: HugeIcons.strokeRoundedPiggyBank,
+              isSelected: _selectedIndex == 2,
+              icon: HugeIcons.strokeRoundedChartBreakoutSquare,
+              // icon: HugeIcons.strokeRoundedPiggyBank,
             ),
-            label: 'Goals',
+            label: 'Statistics',
           ),
           BottomNavigationBarItem(
             icon: MenuItemIcon(
-              isSelected: _selectedIndex == 4,
+              isSelected: _selectedIndex == 3,
               icon: HugeIcons.strokeRoundedUser,
             ),
             label: 'Profile',
